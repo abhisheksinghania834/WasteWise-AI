@@ -18,7 +18,8 @@ jobs:
       - name: Check JavaScript syntax
         run: node --check app.js
       - name: Verify product hooks and secret hygiene
-        run: node --input-type=module -e 'import { readFileSync } from "node:fs"; import assert from "node:assert/strict"; const html=readFileSync("index.html","utf8"), js=readFileSync("app.js","utf8"), css=readFileSync("styles.css","utf8"); for (const hook of ["id=\"sortForm\"","id=\"materialGrid\"","id=\"impact\"","id=\"quizCard\"","id=\"mobileNav\""]) assert.ok(html.includes(hook), `Missing UI hook: ${hook}`); for (const marker of ["function showResult","function renderMaterials","function renderActions","function renderQuiz","localStorage","addEventListener"]) assert.ok(js.includes(marker), `Missing implementation: ${marker}`); assert.ok(css.includes("@media(max-width:650px)"), "Missing responsive styles"); assert.ok(html.includes("aria-live"), "Missing live announcements"); assert.ok(!/AIza[0-9A-Za-z_-]{20,}|sk-[A-Za-z0-9]{20,}/.test(js+html), "Possible API key committed"); console.log("WasteWise static checks passed.")'
+        run: |
+          node --input-type=module -e 'import { readFileSync } from "node:fs"; import assert from "node:assert/strict"; const html=readFileSync("index.html","utf8"), js=readFileSync("app.js","utf8"), css=readFileSync("styles.css","utf8"); for (const hook of ["id=\\\"sortForm\\\"","id=\\\"materialGrid\\\"","id=\\\"impact\\\"","id=\\\"quizCard\\\"","id=\\\"mobileNav\\\""]) assert.ok(html.includes(hook), `Missing UI hook: ${hook}`); for (const marker of ["function showResult","function renderMaterials","function renderActions","function renderQuiz","localStorage","addEventListener"]) assert.ok(js.includes(marker), `Missing implementation: ${marker}`); assert.ok(css.includes("@media(max-width:650px)"), "Missing responsive styles"); assert.ok(html.includes("aria-live"), "Missing live announcements"); assert.ok(!/AIza[0-9A-Za-z_-]{20,}|sk-[A-Za-z0-9]{20,}/.test(js+html), "Possible API key committed"); console.log("WasteWise static checks passed.")'
       - name: Upload static site artifact
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
@@ -34,7 +35,7 @@ jobs:
       id-token: write
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: \${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Configure Pages
         uses: actions/configure-pages@v5
