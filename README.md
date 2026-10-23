@@ -6,12 +6,15 @@ WasteWise is a responsive, no-account-required waste-sorting and habit-building 
 **Expected live URL after Pages is enabled:** https://abhisheksinghania834.github.io/WasteWise-AI/
 
 ## Features
-- Quick sorter for common household items, including food scraps, paper, plastic, glass, metal, batteries, electronics, textiles, medicines, flexible plastic and household chemicals.
+- Context-aware quick sorter for common household items, including food scraps, paper, plastic, glass, metal, batteries, electronics, textiles, medicines, flexible plastic and household chemicals.
+- Personalised guidance uses disposal setting (home/shared bins/school or workplace/public place), item condition (clean/soiled/damaged), and the user's priority (safe disposal/recycling/reuse).
+- Specific phrase matching prefers longer, more precise item terms and provides a safe fallback for unknown items.
 - Searchable/filterable materials library.
 - Personal action tracker stored in browser local storage, with a rolling seven-day count.
 - Three-question interactive quiz with answer feedback.
 - Responsive design, keyboard focus states, semantic landmarks, skip link, live status announcements, and reduced-motion support.
 - No account, application server, API key, or external AI inference API required.
+- Automated unit tests for decision matching, unknown inputs, specificity, and contextual guidance run with `node --test` before deployment.
 
 ## Tech stack
 HTML5, CSS3, vanilla JavaScript ES modules, browser local storage, GitHub Actions and GitHub Pages. No build step is required.
@@ -23,7 +26,11 @@ The deployed item sorter is a deterministic keyword/rule-based assistant, not a 
 Open `index.html` in a browser or run `python3 -m http.server 8000` and visit `http://localhost:8000`.
 
 ## Enable and deploy GitHub Pages
-GitHub Pages must be enabled once for this repository before Actions can publish. Open [WasteWise Pages settings](https://github.com/abhisheksinghania834/WasteWise-AI/settings/pages) and choose **GitHub Actions** as the build/deployment source. The repository's workflow then checks JavaScript syntax, uploads the static site, and deploys on pushes to `main`. Follow the result in the [Actions tab](https://github.com/abhisheksinghania834/WasteWise-AI/actions).
+GitHub Pages must be enabled once for this repository before Actions can publish. Open [WasteWise Pages settings](https://github.com/abhisheksinghania834/WasteWise-AI/settings/pages) and choose **GitHub Actions** as the build/deployment source. The repository's workflow checks JavaScript syntax, runs automated tests, and only then uploads and deploys the static site on pushes to `main`. Follow the result in the [Actions tab](https://github.com/abhisheksinghania834/WasteWise-AI/actions).
+
+## Automated tests
+
+Run `node --test` from the repository root. The tests cover case-insensitive matching, preference for specific phrases, natural-language item descriptions, blank/unknown inputs, and context-sensitive advice.
 
 ## Verify before submitting
 1. Try “banana peel”, “plastic bottle”, “old battery”, “cardboard box”, and an unknown item in Quick Sort.
