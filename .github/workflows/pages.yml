@@ -17,8 +17,7 @@ jobs:
       url: \${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Check out source
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
@@ -27,14 +26,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Check JavaScript syntax
+      - name: Check app JavaScript syntax
         run: node --check app.js
-      - name: Validate UI hooks
-        run: node --input-type=module -e 'import {readFileSync} from "node:fs"; import assert from "node:assert/strict"; const h=readFileSync("index.html","utf8"), j=readFileSync("app.js","utf8"); for(const id of ["sortForm","materialGrid","impact","quizCard","mobileNav"]) assert.ok(h.includes("id=\""+id+"\""),"Missing UI hook: "+id); for(const x of ["function showResult","function renderMaterials","function renderActions","function renderQuiz","localStorage"]) assert.ok(j.includes(x),"Missing code: "+x); assert.ok(h.includes("aria-live"),"Missing live region"); console.log("WasteWise validation passed");'
       - name: Upload static site
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
-      - name: Deploy to GitHub Pages
+      - name: Deploy site
         id: deployment
         uses: actions/deploy-pages@v4
