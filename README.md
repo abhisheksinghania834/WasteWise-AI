@@ -5,6 +5,14 @@ WasteWise is a responsive, no-account-required waste-sorting and habit-building 
 **Repository:** https://github.com/abhisheksinghania834/WasteWise-AI
 **Expected live URL after Pages is enabled:** https://abhisheksinghania834.github.io/WasteWise-AI/
 
+## Problem and intended users
+
+People making everyday disposal decisions often lack clear, item-specific guidance. The correct next step can depend on the material, whether it is clean or damaged, where the waste is being handled, and local collection rules. Guesswork can contaminate recycling or lead to unsafe handling of batteries, electronics, chemicals, and other special-care waste.
+
+WasteWise is designed for students, households, and other everyday users who need a quick, understandable starting point. It asks users to identify an item, select relevant context, and choose their priority (safe disposal, recycling, or reuse). It then combines a transparent item-matching rule with context-specific reminders and preparation tips. If it cannot confidently match an item, it does not invent a category; it directs the user to check local collection guidance.
+
+**Intended value:** reduce uncertainty at the moment of disposal, make safer choices easier to understand, and encourage reuse before discarding when appropriate. The app does not claim to replace municipal guidance or measure actual waste reduction.
+
 ## Features
 - Context-aware quick sorter for common household items, including food scraps, paper, plastic, glass, metal, batteries, electronics, textiles, medicines, flexible plastic and household chemicals.
 - Personalised guidance uses disposal setting (home/shared bins/school or workplace/public place), item condition (clean/soiled/damaged), and the user's priority (safe disposal/recycling/reuse).
