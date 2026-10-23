@@ -4,7 +4,7 @@
  * This is transparent rule-based guidance, not a generative AI model.
  */
 export function matchRule(query, rules) {
-  const normalized = String(query ?? "").toLowerCase().trim().replace(/\\s+/g, " ");
+  const normalized = String(query ?? "").toLowerCase().trim().replace(/\s+/g, " ");
   if (!normalized || !Array.isArray(rules)) return null;
 
   let best = null;
