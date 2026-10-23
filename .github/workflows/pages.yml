@@ -1,0 +1,58 @@
+name: Validate and deploy WasteWise
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check JavaScript syntax
+        run: node --check app.js
+      - name: Verify product hooks and secret hygiene
+        run: |
+          node --input-type=module <<\x27NODE\x27
+          import { readFileSync } from \x27node:fs\x27;
+          import assert from \x27node:assert/strict\x27;
+          const html = readFileSync(\x27index.html\x27, \x27utf8\x27);
+          const js = readFileSync(\x27app.js\x27, \x27utf8\x27);
+          const css = readFileSync(\x27styles.css\x27, \x27utf8\x27);
+          for (const hook of [\x27id="sortForm"\x27,\x27id="materialGrid"\x27,\x27id="impact"\x27,\x27id="quizCard"\x27,\x27id="mobileNav"\x27]) assert.ok(html.includes(hook), `Missing UI hook: ${hook}`);
+          for (const marker of [\x27function showResult\x27,\x27function renderMaterials\x27,\x27function renderActions\x27,\x27function renderQuiz\x27,\x27localStorage\x27,\x27addEventListener\x27]) assert.ok(js.includes(marker), `Missing implementation: ${marker}`);
+          assert.ok(css.includes(\x27@media(max-width:650px)\x27), \x27Missing mobile responsive styles\x27);
+          assert.ok(html.includes(\x27aria-live\x27), \x27Missing live accessibility announcements\x27);
+          assert.ok(!/AIza[0-9A-Za-z_-]{20,}|sk-[A-Za-z0-9]{20,}/.test(js+html), \x27Possible API key committed\x27);
+          console.log(\x27WasteWise checks passed.\x27);
+          NODE
+      - name: Upload static site artifact
+        if: github.event_name != \x27pull_request\x27
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+  deploy:
+    if: github.event_name != \x27pull_request\x27
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Deploy site
+        id: deployment
+        uses: actions/deploy-pages@v4
